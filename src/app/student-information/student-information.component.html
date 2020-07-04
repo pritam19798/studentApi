@@ -1,57 +1,67 @@
 <div >
-    <h1>Students information</h1>
+  <div class="container">
+    <h1 >Students information</h1>
+  </div>
 
     <div class="container">
 
+      <div class="row mb-1 ml-1">
+          <button (click)="open(addmodel)" class="btn btn-success" ><fa-icon [icon]="faPlus"></fa-icon>Add new student</button>
+          <ng-template #addmodel let-modal>
+              <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">Add new student Details</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form  #f="ngForm">
+                  <div class="form-group">
+                    <label for="email">Email address:</label>
+                    <div class="alert alert-warning" *ngIf="email.touched && email.invalid">Email required</div>
+                    <input type="email" class="form-control" id="email" name="email" required [(ngModel)]="student.email" #email="ngModel">
+                  </div>
+                  <div class="form-group">
+                    <label for="name">Name:</label>
+                    <div class="alert alert-warning" *ngIf="name.touched && name.invalid ">Name required</div>
+                    <input type="text" class="form-control" id="name" name="name" required [(ngModel)]="student.name" #name="ngModel">
+                  </div>
+                  <div class="form-group">
+                    <label for="Date">Date:</label>
+                    <div class="alert alert-warning"  *ngIf="date.touched &&  date.invalid">Date required</div>
+                    <input type="date" class="form-control" id="Date" name="date"[ngModel]=" student.date | date:'yyyy-MM-dd'" 
+                    (ngModelChange)="student.date=$event" required #date="ngModel">
+                  </div>
+                  <div class="form-group">
+                    <label for="Age">Age:</label>
+                    <div class="alert alert-warning"  *ngIf="age.touched && age.invalid">Age required</div>  
+                    <div class="alert alert-warning"  *ngIf="lowAge">Age Should not be less than 10</div>                                                
+                    <input type="number" class="form-control" id="age" name="age" required  [(ngModel)]="student.age" #age="ngModel">
+                  </div>
+                  <div class="form-group">
+                    <label for="Roll">Roll:</label>
+                    <div class="alert alert-warning"  *ngIf="rollNo.touched && rollNo.invalid">Roll required</div>
+                    <input type="number" class="form-control" id="Roll" name="Roll" required [(ngModel)]="student.rollNo" #rollNo="ngModel">
+                  </div>
+                  <div class="form-group">
+                    <label >Gender: </label><br>         
+                    <input type="radio" name="isMale" id="isMale" value="male" checked [(ngModel)]="gender" ><i>Male</i><br>
+                    <input type="radio" name="isMale" id="isMale" value="female" [(ngModel)]="gender"><i>Female</i>
+                  </div>
 
-    <div class="row mb-5">
-        <td><button (click)="open(addmodel)" class="btn btn-success" ><fa-icon [icon]="faPlus"></fa-icon>Add new student</button></td>
-        <ng-template #addmodel let-modal>
-            <div class="modal-header">
-              <h4 class="modal-title" id="modal-basic-title">Add new student Deails</h4>
-              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form  >
-                <div class="form-group">
-                  <label for="email">Email address:</label>
-                  <input type="text" class="form-control" id="email" name="email" [(ngModel)]="student.email">
-                </div>
-                <div class="form-group">
-                  <label for="name">Name:</label>
-                  <input type="text" class="form-control" id="name" name="name" [(ngModel)]="student.name">
-                </div>
-                <div class="form-group">
-                  <label for="Date">Date:</label>
-                  <input type="text" class="form-control" id="Date" name="date" [(ngModel)]="student.date">
-                </div>
-                <div class="form-group">
-                  <label for="Age">Age:</label>
-                  <input type="text" class="form-control" id="age" name="age" [(ngModel)]="student.age">
-                </div>
-                <div class="form-group">
-                  <label for="Roll">Roll:</label>
-                  <input type="text" class="form-control" id="Roll" name="Roll" [(ngModel)]="student.rollNo">
-                </div>
-                <div class="form-group">
-                  <label >Gender: </label><br>
-                  <input type="radio" name="isMale" id="isMale" value="true" [(ngModel)]="gender" ><i>Male</i><br>
-                  <input type="radio" name="isMale" id="isMale" value="false" [(ngModel)]="gender"><i>Female</i>
-                </div>
+                  
+                  <button type="submit" class="btn btn-success" (click)="!f.invalid && addNewStudent()">Submit</button>
 
-                
-                <button type="button" class="btn btn-success" (click)="modal.dismiss('add click')">Submit</button>
+                </form>
+              </div>
+              <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="add()">Ok</button>
+              </div> -->
+            </ng-template>
+      </div>
 
-              </form>
-            </div>
-            <!-- <div class="modal-footer">
-              <button type="button" class="btn btn-outline-dark" (click)="add()">Ok</button>
-            </div> -->
-          </ng-template>
-    </div>
-    <table class="table">
+  <div class="card mb-4">
+    <table class="card-table table table-striped">
     
         <thead>
             <tr>
@@ -72,47 +82,54 @@
                 <td>{{student.email}}</td>
                 <td>{{student.age}}</td>
                 <td>{{student.rollNo}}</td>
-                <td *ngIf="!student.isMale">Female</td>
-                <td *ngIf="student.isMale">Male</td>
+                <td *ngIf="!student.isMale" ><fa-icon [icon]="faFemale"></fa-icon></td>
+                <td *ngIf="student.isMale" ><fa-icon [icon]="faMale"></fa-icon></td>
 
                 <td><button class="btn btn-success" (click)="open(editmodel)">Update </button></td>
-                <td><button (click)="delete(student)" class="btn btn-warning"><fa-icon [icon]="faTrash"></fa-icon></button></td>
+                <td><button (click)="deleteStudent(student)" class="btn btn-warning"><fa-icon [icon]="faTrash"></fa-icon></button></td>
                 <!-- popup to Update -->
                 <ng-template #editmodel let-modal>
                   <div class="modal-header">
-                    <h4 class="modal-title" id="modal-basic-title">Updae student Deails</h4>
+                    <h4 class="modal-title" id="modal-basic-title">Updae student Details</h4>
                     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                       <span aria-hidden="true">×</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <form  >
+                    <form #f="ngForm" >
                       <div class="form-group">
                         <label for="email">Email address:</label>
-                        <input type="text" class="form-control" id="email" name="email" [(ngModel)]="student.email">
+                        <div class="alert alert-warning" *ngIf="email.touched && email.invalid">Email required</div>
+                        <input type="email" class="form-control" id="email" name="email" required [(ngModel)]="student.email" #email="ngModel">
                       </div>
                       <div class="form-group">
                         <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="student.name">
+                        <div class="alert alert-warning" *ngIf="name.touched && name.invalid ">Name required</div>
+                        <input type="text" class="form-control" id="name" name="name" required [(ngModel)]="student.name" #name="ngModel">
                       </div>
                       <div class="form-group">
                         <label for="Date">Date:</label>
-                        <input type="text" class="form-control" id="Date" name="date" [(ngModel)]="student.date">
+                        <div class="alert alert-warning"  *ngIf="date.touched &&  date.invalid">Date required</div>
+                        <input type="date" class="form-control" id="Date" name="date"[ngModel]=" student.date | date:'yyyy-MM-dd'" 
+                        (ngModelChange)="student.date=$event" required #date="ngModel">
                       </div>
                       <div class="form-group">
                         <label for="Age">Age:</label>
-                        <input type="text" class="form-control" id="age" name="age" [(ngModel)]="student.age">
+                        <div class="alert alert-warning"  *ngIf="age.touched && age.invalid">Age required</div> 
+                        <div class="alert alert-warning"  *ngIf="lowAge">Age Should not be less than 10</div>                             
+                        <input type="number" class="form-control" id="age" name="age" required  [(ngModel)]="student.age" #age="ngModel">
                       </div>
                       <div class="form-group">
                         <label for="Roll">Roll:</label>
-                        <input type="text" class="form-control" id="Roll" name="Roll" [(ngModel)]="student.rollNo">
+                        <div class="alert alert-warning"  *ngIf="rollNo.touched && rollNo.invalid">Roll required</div>
+                          <input type="number" class="form-control" id="Roll" name="Roll" required [(ngModel)]="student.rollNo" #rollNo="ngModel">
                       </div>
                       <div class="form-group">
                         <label >Gender: </label><br>
-                        <input type="radio" name="isMale" id="isMale" value=true [(ngModel)]="gender"><i>Male</i><br>
-                        <input type="radio" name="isMale" id="isMale" value=false [(ngModel)]="gender" ><i>Female</i>
+                        <input type="radio" name="isMale" id="isMale" value="male" [(ngModel)]="gender" ><i>Male</i><br>
+                        <input type="radio" name="isMale" id="isMale" value="female" [(ngModel)]="gender"><i>Female</i>
                       </div>
-                      <button type="button" class="btn btn-success" (click)="update(student)">Submit</button>
+                      <button type="button" class="btn btn-success" (click)="!f.invalid && updateStudentDetails(student)">Submit</button>
       
                     </form>
                   </div>
@@ -121,6 +138,7 @@
             </tr>
         </tbody>
     </table>
+  </div>
 
     </div>
 </div>

@@ -20,11 +20,7 @@ export class AppComponent {
   ){}
 
   handle(){
-    // console.log('clicked')
-    // this.service.apiCall().subscribe(students=>{
-    //   this.students=students
-    //   this.ref.detectChanges()
-    // })
+
 
     this.students=this.service.students
     

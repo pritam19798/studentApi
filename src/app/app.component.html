@@ -1,9 +1,8 @@
-<button (click)="handle()" class="btn btn-primary" *ngIf="!students">Get Students</button>
-<!-- <div *ngFor="let l of s">
-  <p>{{l.age}}</p>
-  <p>{{l.name}}</p>
-   <p>{{l.isMale}}</p>
-   <p>{{l.rollNo}}</p>
-</div> -->
+
+<div class="wrapper">
+  <button (click)="handle()" class="btn btn-primary" *ngIf="!students">Get Students</button>
+</div>
+
+
 <app-student-information *ngIf="students"></app-student-information>
 <router-outlet></router-outlet>
