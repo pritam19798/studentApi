@@ -1,0 +1,128 @@
+<div >
+    <h1>Students information</h1>
+
+    <div class="container">
+
+
+    <div class="row mb-5">
+        <td><button (click)="open(addmodel)" class="btn btn-success" ><fa-icon [icon]="faPlus"></fa-icon>Add new student</button></td>
+        <ng-template #addmodel let-modal>
+            <div class="modal-header">
+              <h4 class="modal-title" id="modal-basic-title">Add new student Deails</h4>
+              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form  >
+                <div class="form-group">
+                  <label for="email">Email address:</label>
+                  <input type="text" class="form-control" id="email" name="email" [(ngModel)]="student.email">
+                </div>
+                <div class="form-group">
+                  <label for="name">Name:</label>
+                  <input type="text" class="form-control" id="name" name="name" [(ngModel)]="student.name">
+                </div>
+                <div class="form-group">
+                  <label for="Date">Date:</label>
+                  <input type="text" class="form-control" id="Date" name="date" [(ngModel)]="student.date">
+                </div>
+                <div class="form-group">
+                  <label for="Age">Age:</label>
+                  <input type="text" class="form-control" id="age" name="age" [(ngModel)]="student.age">
+                </div>
+                <div class="form-group">
+                  <label for="Roll">Roll:</label>
+                  <input type="text" class="form-control" id="Roll" name="Roll" [(ngModel)]="student.rollNo">
+                </div>
+                <div class="form-group">
+                  <label >Gender: </label><br>
+                  <input type="radio" name="isMale" id="isMale" value="true" [(ngModel)]="gender" ><i>Male</i><br>
+                  <input type="radio" name="isMale" id="isMale" value="false" [(ngModel)]="gender"><i>Female</i>
+                </div>
+
+                
+                <button type="button" class="btn btn-success" (click)="modal.dismiss('add click')">Submit</button>
+
+              </form>
+            </div>
+            <!-- <div class="modal-footer">
+              <button type="button" class="btn btn-outline-dark" (click)="add()">Ok</button>
+            </div> -->
+          </ng-template>
+    </div>
+    <table class="table">
+    
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Roll</th>
+                <th>Gender</th>
+                <th>Update</th>
+                <th>Delete</th>
+             </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let student of this.service.students;">
+                <td>{{student.name}}</td>
+                <td>{{student.date}}</td>
+                <td>{{student.email}}</td>
+                <td>{{student.age}}</td>
+                <td>{{student.rollNo}}</td>
+                <td *ngIf="!student.isMale">Female</td>
+                <td *ngIf="student.isMale">Male</td>
+
+                <td><button class="btn btn-success" (click)="open(editmodel)">Update </button></td>
+                <td><button (click)="delete(student)" class="btn btn-warning"><fa-icon [icon]="faTrash"></fa-icon></button></td>
+                <!-- popup to Update -->
+                <ng-template #editmodel let-modal>
+                  <div class="modal-header">
+                    <h4 class="modal-title" id="modal-basic-title">Updae student Deails</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form  >
+                      <div class="form-group">
+                        <label for="email">Email address:</label>
+                        <input type="text" class="form-control" id="email" name="email" [(ngModel)]="student.email">
+                      </div>
+                      <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="student.name">
+                      </div>
+                      <div class="form-group">
+                        <label for="Date">Date:</label>
+                        <input type="text" class="form-control" id="Date" name="date" [(ngModel)]="student.date">
+                      </div>
+                      <div class="form-group">
+                        <label for="Age">Age:</label>
+                        <input type="text" class="form-control" id="age" name="age" [(ngModel)]="student.age">
+                      </div>
+                      <div class="form-group">
+                        <label for="Roll">Roll:</label>
+                        <input type="text" class="form-control" id="Roll" name="Roll" [(ngModel)]="student.rollNo">
+                      </div>
+                      <div class="form-group">
+                        <label >Gender: </label><br>
+                        <input type="radio" name="isMale" id="isMale" value=true [(ngModel)]="gender"><i>Male</i><br>
+                        <input type="radio" name="isMale" id="isMale" value=false [(ngModel)]="gender" ><i>Female</i>
+                      </div>
+                      <button type="button" class="btn btn-success" (click)="update(student)">Submit</button>
+      
+                    </form>
+                  </div>
+                </ng-template>
+                <!-- popup end -->
+            </tr>
+        </tbody>
+    </table>
+
+    </div>
+</div>
+
+
