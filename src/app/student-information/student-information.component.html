@@ -39,7 +39,6 @@
                     type="date"
                     required
                     class="form-control"
-                    #datepickerYMD="bsDatepicker"
                     bsDatepicker
                     id="Date" name="date" [ngModel]=" student.date | date:'yyyy-MM-dd'"
                     (ngModelChange)="student.date=$event"
@@ -112,7 +111,7 @@
                 <ng-template #editmodel let-modal>
                   <div class="modal-header">
                     <h4 class="modal-title" id="modal-basic-title">Updae student Details</h4>
-                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <button type="button" class="close" aria-label="Close" (click)="!f.invalid && modal.dismiss('Cross click')">
                       <span aria-hidden="true">×</span>
                     </button>
                   </div>
@@ -141,7 +140,6 @@
                         type="date"
                         required
                         class="form-control"
-
                         bsDatepicker
                         id="Date" name="date" [ngModel]=" student.date | date:'yyyy-MM-dd'"
                         (ngModelChange)="student.date=$event"
