@@ -5,7 +5,7 @@ import { Student } from '../student';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class StudentApiService {
 
   students:Student[]
   constructor(

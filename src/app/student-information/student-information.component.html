@@ -6,7 +6,7 @@
     <div class="container">
 
       <div class="row mb-1 ml-1">
-          <button (click)="open(addmodel)" class="btn btn-success" ><fa-icon [icon]="faPlus"></fa-icon>Add new student</button>
+          <button (click)="openAddStudent(addmodel)" class="btn btn-success" ><fa-icon [icon]="faPlus"></fa-icon>Add new student</button>
           <ng-template #addmodel let-modal>
               <div class="modal-header">
                 <h4 class="modal-title" id="modal-basic-title">Add new student Details</h4>
@@ -18,38 +18,59 @@
                 <form  #f="ngForm">
                   <div class="form-group">
                     <label for="email">Email address:</label>
-                    <div class="alert alert-warning" *ngIf="email.touched && email.invalid">Email required</div>
-                    <input type="email" class="form-control" id="email" name="email" required [(ngModel)]="student.email" #email="ngModel">
+                    <input type="email"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                    class="form-control" id="email" name="email" required [(ngModel)]="student.email" #email="ngModel">
+                    <div>
+                      <span class="text-danger" *ngIf="email.touched && email.errors?.required">Email required</span>
+                      <span class="text-danger " *ngIf="email.touched && email.errors?.pattern">Email not valid</span>
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="name">Name:</label>
-                    <div class="alert alert-warning" *ngIf="name.touched && name.invalid ">Name required</div>
                     <input type="text" class="form-control" id="name" name="name" required [(ngModel)]="student.name" #name="ngModel">
+                    <div>
+                      <span class="text-danger" *ngIf="name.touched && name.invalid ">Name required</span>
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="Date">Date:</label>
-                    <div class="alert alert-warning"  *ngIf="date.touched &&  date.invalid">Date required</div>
-                    <input type="date" class="form-control" id="Date" name="date"[ngModel]=" student.date | date:'yyyy-MM-dd'" 
-                    (ngModelChange)="student.date=$event" required #date="ngModel">
+                    <input
+                    type="date"
+                    required
+                    class="form-control"
+                    #datepickerYMD="bsDatepicker"
+                    bsDatepicker
+                    id="Date" name="date" [ngModel]=" student.date | date:'yyyy-MM-dd'"
+                    (ngModelChange)="student.date=$event"
+                    #date="ngModel"
+                    [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }">
+                    <div>
+                      <span class="text-danger"  *ngIf="date.touched &&  date.invalid">Date required</span>
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="Age">Age:</label>
-                    <div class="alert alert-warning"  *ngIf="age.touched && age.invalid">Age required</div>  
-                    <div class="alert alert-warning"  *ngIf="lowAge">Age Should not be less than 10</div>                                                
                     <input type="number" class="form-control" id="age" name="age" required  [(ngModel)]="student.age" #age="ngModel">
+                    <div>
+                      <span class="text-danger" *ngIf="age.touched && age.invalid">Age required</span>
+                      <span class="text-danger " *ngIf="lowAge">Age Should not be less than 10</span>
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="Roll">Roll:</label>
-                    <div class="alert alert-warning"  *ngIf="rollNo.touched && rollNo.invalid">Roll required</div>
-                    <input type="number" class="form-control" id="Roll" name="Roll" required [(ngModel)]="student.rollNo" #rollNo="ngModel">
+                      <input type="number" class="form-control" id="Roll" name="Roll" required [(ngModel)]="student.rollNo" #rollNo="ngModel">
+                      <div>
+                        <span class="text-danger"  *ngIf="rollNo.touched && rollNo.invalid">Roll required</span>
+                      </div>
                   </div>
                   <div class="form-group">
-                    <label >Gender: </label><br>         
+                    <label >Gender: </label><br>
                     <input type="radio" name="isMale" id="isMale" value="male" checked [(ngModel)]="gender" ><i>Male</i><br>
                     <input type="radio" name="isMale" id="isMale" value="female" [(ngModel)]="gender"><i>Female</i>
                   </div>
 
-                  
+
                   <button type="submit" class="btn btn-success" (click)="!f.invalid && addNewStudent()">Submit</button>
 
                 </form>
@@ -62,7 +83,7 @@
 
   <div class="card mb-4">
     <table class="card-table table table-striped">
-    
+
         <thead>
             <tr>
                 <th>Name</th>
@@ -78,14 +99,14 @@
         <tbody>
             <tr *ngFor="let student of this.service.students;">
                 <td>{{student.name}}</td>
-                <td>{{student.date}}</td>
+                <td>{{student.date  | date:'yyyy-MM-dd'}}</td>
                 <td>{{student.email}}</td>
                 <td>{{student.age}}</td>
                 <td>{{student.rollNo}}</td>
                 <td *ngIf="!student.isMale" ><fa-icon [icon]="faFemale"></fa-icon></td>
                 <td *ngIf="student.isMale" ><fa-icon [icon]="faMale"></fa-icon></td>
 
-                <td><button class="btn btn-success" (click)="open(editmodel)">Update </button></td>
+                <td><button class="btn btn-success" (click)="openUpdate(editmodel,student)">Update </button></td>
                 <td><button (click)="deleteStudent(student)" class="btn btn-warning"><fa-icon [icon]="faTrash"></fa-icon></button></td>
                 <!-- popup to Update -->
                 <ng-template #editmodel let-modal>
@@ -99,38 +120,59 @@
                     <form #f="ngForm" >
                       <div class="form-group">
                         <label for="email">Email address:</label>
-                        <div class="alert alert-warning" *ngIf="email.touched && email.invalid">Email required</div>
-                        <input type="email" class="form-control" id="email" name="email" required [(ngModel)]="student.email" #email="ngModel">
+                        <input type="email"
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                        class="form-control" id="email" name="email" required [(ngModel)]="student.email" #email="ngModel">
+                        <div >
+                          <span class="text-danger" *ngIf=" email.errors?.required">Email required</span>
+                          <span class="text-danger " *ngIf=" email.errors?.pattern ">Email not valid</span>
+                        </div>
                       </div>
                       <div class="form-group">
                         <label for="name">Name:</label>
-                        <div class="alert alert-warning" *ngIf="name.touched && name.invalid ">Name required</div>
                         <input type="text" class="form-control" id="name" name="name" required [(ngModel)]="student.name" #name="ngModel">
+                        <div>
+                          <span class="text-danger" *ngIf=" name.invalid ">Name required</span>
+                        </div>
                       </div>
                       <div class="form-group">
                         <label for="Date">Date:</label>
-                        <div class="alert alert-warning"  *ngIf="date.touched &&  date.invalid">Date required</div>
-                        <input type="date" class="form-control" id="Date" name="date"[ngModel]=" student.date | date:'yyyy-MM-dd'" 
-                        (ngModelChange)="student.date=$event" required #date="ngModel">
+                        <input
+                        type="date"
+                        required
+                        class="form-control"
+
+                        bsDatepicker
+                        id="Date" name="date" [ngModel]=" student.date | date:'yyyy-MM-dd'"
+                        (ngModelChange)="student.date=$event"
+                        #date="ngModel"
+                        [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }">
+                        <div>
+                          <span class="text-danger"  *ngIf="  date.invalid">Date required</span>
+                        </div>
                       </div>
                       <div class="form-group">
                         <label for="Age">Age:</label>
-                        <div class="alert alert-warning"  *ngIf="age.touched && age.invalid">Age required</div> 
-                        <div class="alert alert-warning"  *ngIf="lowAge">Age Should not be less than 10</div>                             
                         <input type="number" class="form-control" id="age" name="age" required  [(ngModel)]="student.age" #age="ngModel">
+                        <div>
+                          <span class="text-danger" *ngIf=" age.invalid">Age required</span>
+                          <span class="text-danger " *ngIf="lowAge">Age Should not be less than 10</span>
+                        </div>
                       </div>
                       <div class="form-group">
                         <label for="Roll">Roll:</label>
-                        <div class="alert alert-warning"  *ngIf="rollNo.touched && rollNo.invalid">Roll required</div>
                           <input type="number" class="form-control" id="Roll" name="Roll" required [(ngModel)]="student.rollNo" #rollNo="ngModel">
+                          <div>
+                            <span class="text-danger"  *ngIf=" rollNo.invalid">Roll required</span>
+                          </div>
                       </div>
                       <div class="form-group">
                         <label >Gender: </label><br>
                         <input type="radio" name="isMale" id="isMale" value="male" [(ngModel)]="gender" ><i>Male</i><br>
-                        <input type="radio" name="isMale" id="isMale" value="female" [(ngModel)]="gender"><i>Female</i>
+                        <input type="radio" name="isMale" id="isMale" value="female" [(ngModel)]="gender" ><i>Female</i>
                       </div>
                       <button type="button" class="btn btn-success" (click)="!f.invalid && updateStudentDetails(student)">Submit</button>
-      
+
                     </form>
                   </div>
                 </ng-template>

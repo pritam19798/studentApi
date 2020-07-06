@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { ApiService } from './services/api.service';
+import { StudentApiService } from './services/student-api.service';
 import { Student } from './student';
 
 
@@ -14,8 +14,8 @@ export class AppComponent {
 
   students:Student[]
   constructor(
-    
-    public service:ApiService,
+
+    public service:StudentApiService,
     private ref:ChangeDetectorRef
   ){}
 
@@ -23,7 +23,7 @@ export class AppComponent {
 
 
     this.students=this.service.students
-    
+
   }
 
 
